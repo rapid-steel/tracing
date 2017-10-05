@@ -9,176 +9,139 @@
 </head>
 <body>
 
-<div class="container-fluid ">
+<div class="container-fluid">
     <div class="row">
         <div class="col-9" id="document-container">
-            <iframe id="document" src="test/2015_2_125_132.pdf"></iframe>
+            <iframe id="document" scrolling="yes" src="test/x028.gif"></iframe>
         </div>
 
         <div class="col-3" id="toolbar">
 
             <hr>
 
-            <!-- Lines section --->
+            <div class="col addPoint text-center">
+                Add point
+            </div>
+            <div class="col editPoint text-center">
+                Edit point
+            </div>
 
-            <div class="row" id="addPointRow">
-                <div class="col-2">
-                    <button class="btn btn-primary" id="addPoint">
+            <div class="row">
+                <input class="col-3 offset-2 addPoint form-control" id="pointXadd" type="number">
+                <input class="col-3 addPoint form-control" id="pointYadd" type="number">
+
+                    <button class="col-2 offset-1 addPoint btn btn-primary" id="addPoint" title="Add point">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </button>
-                </div>
-                <div class="col-5">
 
-                    <div class="row">
-                        <div class="col-5">
-                            X:
-                        </div>
-                        <div class="col-7">
-                            <input class="form-control" id="pointXadd" type="number">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-5">
-                    <div class="row">
-                        <div class="col-5">
-                            Y:
-                        </div>
-                        <div class="col-7">
-                            <input class="form-control" id="pointYadd" type="number">
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <input class="col-3 editPoint offset-1 form-control" id="pointXedit" type="number">
+                <input class="col-3 editPoint form-control" id="pointYedit" type="number">
 
-            <div class="row" id="editPointRow">
-                <div class="col-2">
-                    <button class="btn btn-primary" id="editPoint">
-                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                <div class="col-2 editPoint">
+                    <button class="btn btn-primary " id="editPoint" title="Save point">
+                        <i class="fa fa-floppy-o" aria-hidden="true"></i>
                     </button>
                 </div>
-                <div class="col-2">
-                    <button class="btn btn-primary" id="deletePoint">
+                <div class="col-2 editPoint">
+                    <button class="btn btn-primary" id="deletePoint" title="Delete point">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
                 </div>
-                <div class="col-5">
-
-                    <div class="row">
-                        <div class="col-5">
-                            X:
-                        </div>
-                        <div class="col-7">
-                            <input class="form-control" id="pointXedit" type="number">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-5">
-                    <div class="row">
-                        <div class="col-5">
-                            Y:
-                        </div>
-                        <div class="col-7">
-                            <input class="form-control" id="pointYedit" type="number">
-                        </div>
-                    </div>
-                </div>
             </div>
-
-            <div class="row">
-                <div class="col-2">
-                    <button class="btn btn-primary" id="deleteLine">
-                        <i class="fa fa-trash" aria-hidden="true"></i>
-                    </button>
-                </div>
-                <div class="col-4">
-                    Current line:
-                </div>
-                <div class="col-6">
-                    <input class="form-control" type="text" id="lineName">
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-6">
-                    <div class="col-3"></div>
-                    <div class="col-2">
-                        <button class="btn btn-primary" id="addLine">
-                            <i class="fa fa-plus" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <select class="form-control" id="selectLine"></select>
-                </div>
-                <div class="col-4">
-                    <input class="form-control" id="newLineName">
-                </div>
-            </div>
-
-            <!-- Axes section --->
 
             <hr>
 
-            <div class="row">
-                <div class="col-4"></div>
-                <div class="col-4">X</div>
-                <div class="col-4">Y</div>
+            <div class="col text-center">
+                Add line
             </div>
 
             <div class="row">
-                <div class="col-4">
-                    Origin:
+                <div class="col-8 offset-1">
+                    <input class="form-control" id="newLineName">
                 </div>
-                <div class="col-4">
-                    <input class="form-control origin" type="number" id="originX">
-                </div>
-                <div class="col-4">
-                    <input class="form-control origin" type="number" id="originY">
-                </div>
+                <button class="btn btn-primary col-2" id="addLine">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <hr>
+
+            <div class="col text-center">
+                Current line
             </div>
 
             <div class="row">
-                <div class="col-4">
-                    Label:
+                <div class="col-8 offset-1">
+                    <input class="form-control" type="text" id="lineName">
                 </div>
-                <div class="col-4">
-                    <input class="form-control labelAxis" type="text" id="labelX">
-                </div>
-                <div class="col-4">
-                    <input class="form-control labelAxis" type="text" id="labelY">
-                </div>
+                <button class="btn btn-primary col-2" id="deleteLine" title="Delete line">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
+
             </div>
 
             <div class="row">
-                <div class="col-4">
-                    Unit:
-                </div>
-                <div class="col-4">
-                    <input class="form-control unit" type="text" id="unitX">
-                </div>
-                <div class="col-4">
-                    <input class="form-control unit" type="text" id="unitY">
+                <div class="col-8 offset-1">
+                    <select class="form-control" id="selectLine"></select>
                 </div>
             </div>
 
+            <hr>
+
+            <div class="col text-center">
+                Edit axes
+            </div>
+
             <div class="row">
-                <div class="col-2 setPointOff"></div>
+                <div class="col-4 offset-3 text-center">X</div>
+                <div class="col-4 text-center">Y</div>
+            </div>
 
-                <div class="col-4 setPointOff">Set known point on axis:</div>
-                <div class="col-4 setPointOff">
-                    <button class="btn btn-primary" id="setAxisPoint">
-                        <i class="fa fa-dot-circle-o" aria-hidden="true"></i>
-                    </button>
+            <div class="row">
+                <div class="col-3 text-right">
+                    Origin
                 </div>
+                <input class=" col-4 form-control origin" type="number" id="originX">
+                <input class=" col-4 form-control origin" type="number" id="originY">
+            </div>
 
-                <div class="col-4 setPointOn">
-                    Value:
+            <div class="row">
+                <div class="col-3 text-right">
+                    Label
                 </div>
+                <input class="col-4 form-control labelAxis" type="text" id="labelX">
+                <input class="col-4 form-control labelAxis" type="text" id="labelY">
+            </div>
 
-
-                <div class="col-4 setPointOn">
-                    <input class="form-control" id="pointPosition">
+            <div class="row">
+                <div class="col-3 text-right">
+                    Unit
                 </div>
+                    <input class="col-4 form-control unit" type="text" id="unitX">
+
+                    <input class="col-4 form-control unit" type="text" id="unitY">
+            </div>
+
+            <hr>
+
+            <div class="col text-center">
+                Set known point on axis
+            </div>
+
+            <div class="col text-center setPointOff">
+                Click to start
+            </div>
+
+            <div class="col text-center setPointOn">
+                Pick a point on axis and enter the value
+            </div>
+
+            <div class="row">
+                <button class="btn btn-primary col-6 offset-3 setPointOff" id="setAxisPoint">
+                    <i class="fa fa-dot-circle-o" aria-hidden="true"></i>
+                </button>
+
+                <input class="col-5 offset-2 setPointOn form-control" id="pointPosition">
                 <div class="col-2 setPointOn">
                     <button class="width-100 btn btn-primary" id="saveAxisPoint">
                         <i class="fa fa-check" aria-hidden="true"></i>
@@ -192,6 +155,8 @@
 
 
             </div>
+
+            <hr>
 
             <div class="row">
                 <div class="col-3"></div>

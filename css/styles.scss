@@ -6,6 +6,16 @@ html, body {
   height: 100%;
 }
 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] { -moz-appearance:textfield; }
+
+input { text-align: center; }
+
 .setPointOn { display: none; }
 
 .container-fluid,
@@ -21,4 +31,10 @@ html, body {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+.origin-field:hover { opacity: .5; }
+
+#document {
+  opacity: .25;
 }

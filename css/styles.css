@@ -5,6 +5,17 @@ html, body {
   width: 100%;
   height: 100%; }
 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0; }
+
+input[type=number] {
+  -moz-appearance: textfield; }
+
+input {
+  text-align: center; }
+
 .setPointOn {
   display: none; }
 
@@ -26,5 +37,11 @@ html, body {
   position: absolute;
   top: 0;
   left: 0; }
+
+.origin-field:hover {
+  opacity: .5; }
+
+#document {
+  opacity: .25; }
 
 /*# sourceMappingURL=styles.css.map */

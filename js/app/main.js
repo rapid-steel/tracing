@@ -1,17 +1,12 @@
 let main = function() { //setPoint. когда инпут пустой, проверка не фурычит
 
   let editMode = 'line';
-  let $container = $('#document-container');
+  let $container = $('#document');
   let sizes = {
-    width: $container.width(),
+    width: $container.prop('scrollWidth') - 20,
     height: $container.height()
   };
   let lines = [];
-
-
-  window.addEventListener('resize', () => {
-
-  });
 
 
   let currentLine = 0;
@@ -30,7 +25,7 @@ let main = function() { //setPoint. когда инпут пустой, пров
     .attr('width', sizes.width)
     .attr('height', sizes.height)
     .style('fill', 'white')
-    .style('opacity', .5);
+    .style('opacity', 0);
 
   let plot = svg.append('g').attr('id', 'plotGr');
 
@@ -178,7 +173,7 @@ let main = function() { //setPoint. когда инпут пустой, пров
 
       this.axisXgroup.select('.axisPoint')
         .attr('cx', this.points.x )
-        .style('display', editMode === 'axis' && this.points.x ? 'block' : 'none')
+        .style('display', editMode === 'axis' && this.points.x && this.axisPoint === 'X' ? 'block' : 'none')
       ;
 
       this.axisXgroup.select('text.lbl')
@@ -190,10 +185,11 @@ let main = function() { //setPoint. когда инпут пустой, пров
       this.axisYgroup
         .call( this.axisY )
         .attr( 'transform', `translate( 0, ${ this.origin.y * 2 } )` );
+;
 
       this.axisYgroup.select('.axisPoint')
-        .attr('cy', this.lengths.Y - this.points.y )
-        .style('display', editMode === 'axis' && this.points.y ? 'block' : 'none')
+        .attr('cy', - this.origin.y + this.lengths.Y - this.points.y)
+        .style('display', editMode === 'axis' && this.points.y && this.axisPoint === 'Y' ? 'block' : 'none')
       ;
 
       this.axisYgroup.select('text.lbl')
@@ -202,14 +198,20 @@ let main = function() { //setPoint. когда инпут пустой, пров
         .attr('y', 30 - this.origin.y );
 
       this.originPoint
-        .attr('cx', this.origin.x )
-        .attr('cy', sizes.height - this.origin.y );
+        .attr('transform', `translate(${this.origin.x},${sizes.height - this.origin.y})`);
 
       plot.attr('transform', `translate( ${ this.origin.x }, ${  - this.origin.y } )` );
 
     },
 
     init() {
+
+      this.axisXgroup.append('rect')
+        .attr('x', 0)
+        .attr('y', -5)
+        .attr('width', sizes.width)
+        .attr('height', 5)
+        .attr('fill', 'transparent');
 
 
       this.axisXgroup.append('circle')
@@ -225,6 +227,12 @@ let main = function() { //setPoint. когда инпут пустой, пров
         .style('font-size', 12)
         ;
 
+      this.axisXgroup.append('rect')
+        .attr('x', -5)
+        .attr('y', -  sizes.height)
+        .attr('width', 10)
+        .attr('height',  sizes.height)
+        .attr('fill', 'transparent');
 
 
       this.axisYgroup.append('circle')
@@ -240,19 +248,35 @@ let main = function() { //setPoint. когда инпут пустой, пров
         .style('font-size', 12)
       ;
 
-      this.originPoint = svg.append('circle')
+      this.originPoint = svg.append('g')
+        .attr('transform', `translate(0,${sizes.height})`);
+
+      this.originPoint.append('rect')
+        .attr('x', -15)
+        .attr('y', -15)
+        .attr('width', 30)
+        .attr('height', 30)
+        .style('opacity', 0)
+        .classed('origin-field', true);
+
+
+
+      this.originPoint
+        .append('circle')
         .attr('cx', 0 )
         .attr('cy', 0 )
-        .attr('r', 15)
-        .style('fill', 'black');
+        .attr('r', 5)
+        .style('fill', 'black')
+        .style('opacity', .7);
 
       let dragAxisPoint = d3.drag()
         .on('start', () => {
+          this.axisPoint = d3.event.sourceEvent.originalTarget.id.slice(2);
 
         })
         .on('drag end', () => {
-          this.setPoint(d3.mouse($('#plot')[0]), d3.event.sourceEvent.originalTarget.id.slice(2));
-          render();
+            this.setPoint(d3.mouse($('#plot')[0]), this.axisPoint );
+            render();
         });
 
       svg.selectAll('.axisPoint').call(dragAxisPoint);
@@ -320,7 +344,10 @@ let main = function() { //setPoint. когда инпут пустой, пров
         this.points[ this.target ] = coord;
         render();
       })
-      .on('end', () =>  this.target = false );
+      .on('end', () => {
+        this.target = false;
+        render();
+      } );
 
 
   };
@@ -375,8 +402,8 @@ let main = function() { //setPoint. когда инпут пустой, пров
     $els: {
       setPointOn: $('.setPointOn'),
       setPointOff: $('.setPointOff'),
-      addPoint: $('#addPointRow'),
-      editPoint: $('#editPointRow'),
+      addPoint: $('.addPoint'),
+      editPoint: $('.editPoint'),
     },
     $controls: {
       addPoint: $('#addPoint'),
@@ -421,9 +448,7 @@ let main = function() { //setPoint. когда инпут пустой, пров
 
     changeMode( mode ) {
       editMode = mode;
-      this.$els.setPointOn.css( 'display', mode === 'axis'  ? 'block' : 'none');
-      this.$els.setPointOff.css('display', mode === 'line' ? 'block' : 'none');
-      this.$controls.saveAxisPoint.attr('disabled', !axes.axisPoint || this.$inputs.pointPosition.val()== '' );
+      render();
     },
 
     setOrigin( event ) {
@@ -453,7 +478,7 @@ let main = function() { //setPoint. когда инпут пустой, пров
 
     addLine() {
 
-      let name = this.$inputs.newLineName.val() || 'line' + lines.length;
+      let name = this.$inputs.newLineName.val() || 'line' + ( lines.length + 1 );
       lines.push( new Line(name) );
       currentLine = lines.length - 1;
       currentPoint = false;
@@ -562,6 +587,10 @@ let main = function() { //setPoint. когда инпут пустой, пров
       this.$inputs.labelY.val( axes.label.Y );
       this.$inputs.unitX.val( axes.unit.X );
       this.$inputs.unitY.val( axes.unit.Y );
+
+      this.$els.setPointOn.css( 'display', editMode === 'axis'  ? 'block' : 'none');
+      this.$els.setPointOff.css('display', editMode === 'line' ? 'block' : 'none');
+      this.$controls.saveAxisPoint.attr('disabled', !axes.axisPoint || this.$inputs.pointPosition.val()== '' );
     }
   };
 
@@ -628,6 +657,8 @@ let main = function() { //setPoint. когда инпут пустой, пров
    };
 
    lines.forEach( line => data.graphs.push({ name: line.name, points: line.points }) );
+
+   console.log( data );
 
   }
 
