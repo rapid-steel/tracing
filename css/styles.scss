@@ -33,8 +33,57 @@ input { text-align: center; }
   left: 0;
 }
 
-.origin-field:hover { opacity: .5; }
+.crosshair { cursor: crosshair }
 
-#document {
-  opacity: .25;
+.point,
+.originPoint,
+.axisPoint { cursor: pointer }
+
+
+
+.selectboxit-container {
+  position: relative;
+  width: 100%!important;
+
+  * {   font-size: 16px!important;  }
+  .selectboxit {
+    width: 100%!important;
+    height: auto;
+    border-radius: 4px;
+    padding: 8px 12px;
+  }
+
+  .selectboxit-options {
+    min-width: 100%!important;
+    width: 100%!important;
+    max-width: 100%!important;
+  }
+
+  .selectboxit-option  {
+    padding: 8px 12px!important;
+    max-width: 100%!important;
+  }
+
+  .selectboxit-focus,
+  .selectboxit-selected {
+    background-color: #0275d8;
+    border-color: #0275d8;
+    & * {
+      background-color: #0275d8!important;
+      border-color: #0275d8!important;
+      color: white!important;
+    }
+  }
+
+  .selectboxit-open,
+  .selectboxit-hover,
+  .selectboxit-enabled,
+  .selectboxit-btn,
+  .selectboxit-enabled *,
+  .selectboxit-btn *,
+  .selectboxit-hover *,
+  .selectboxit-open * {
+    color: black!important;
+    background-color: white!important;
+  }
 }

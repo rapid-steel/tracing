@@ -38,10 +38,49 @@ input {
   top: 0;
   left: 0; }
 
-.origin-field:hover {
-  opacity: .5; }
+.crosshair {
+  cursor: crosshair; }
 
-#document {
-  opacity: .25; }
+.point,
+.originPoint,
+.axisPoint {
+  cursor: pointer; }
+
+.selectboxit-container {
+  position: relative;
+  width: 100% !important; }
+  .selectboxit-container * {
+    font-size: 16px !important; }
+  .selectboxit-container .selectboxit {
+    width: 100% !important;
+    height: auto;
+    border-radius: 4px;
+    padding: 8px 12px; }
+  .selectboxit-container .selectboxit-options {
+    min-width: 100% !important;
+    width: 100% !important;
+    max-width: 100% !important; }
+  .selectboxit-container .selectboxit-option {
+    padding: 8px 12px !important;
+    max-width: 100% !important; }
+  .selectboxit-container .selectboxit-focus,
+  .selectboxit-container .selectboxit-selected {
+    background-color: #0275d8;
+    border-color: #0275d8; }
+    .selectboxit-container .selectboxit-focus *,
+    .selectboxit-container .selectboxit-selected * {
+      background-color: #0275d8 !important;
+      border-color: #0275d8 !important;
+      color: white !important; }
+  .selectboxit-container .selectboxit-open,
+  .selectboxit-container .selectboxit-hover,
+  .selectboxit-container .selectboxit-enabled,
+  .selectboxit-container .selectboxit-btn,
+  .selectboxit-container .selectboxit-enabled *,
+  .selectboxit-container .selectboxit-btn *,
+  .selectboxit-container .selectboxit-hover *,
+  .selectboxit-container .selectboxit-open * {
+    color: black !important;
+    background-color: white !important; }
 
 /*# sourceMappingURL=styles.css.map */
