@@ -29,6 +29,9 @@ let main = function() {
         .style('fill', 'white')
         .style('opacity', .5);
 
+      this.pointsGr = this.svg.append('g')
+        .attr('id', 'pointsGr');
+
       this.plot = this.svg.append('g')
         .attr('id', 'plotGr');
 
@@ -36,9 +39,9 @@ let main = function() {
       this.toolbar = new Toolbar( this );
       this.lines = [new Line('line1', this)];
 
+      this.lines[0].init();
       this.axes.init();
       this.toolbar.init();
-      this.lines[0].init();
 
     },
 
@@ -90,10 +93,10 @@ let main = function() {
 
     render() {
       this.svg.style('display', this.mode === 'plot' ? 'block' : 'none')
-        .classed('crosshair', this.editMode === 'line');
+        .classed('crosshair', true);
 
-      this.axes.render();
       this.lines[ this.currentLine ].render();
+      this.axes.render();
       this.toolbar.render();
     },
 
@@ -126,6 +129,7 @@ let main = function() {
 
     setPoint( coord, id ) {
       this.axes.setPoint( coord, id );
+      this.axes.setScale( this.axes.pointsVal[id], id );
       this.toolbar.renderAxesSection();
       this.axes.render();
     },
@@ -158,7 +162,7 @@ let main = function() {
       let data = {
         axesOrigin: this.axes.origin,
         points: this.axes.points,
-        pointsVal: this.axes.pointsVal,
+        point: this.axes.pointsVal,
         labels: this.axes.label,
         units: this.axes.unit,
         graphs: []

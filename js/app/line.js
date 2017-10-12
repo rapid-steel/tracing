@@ -21,14 +21,14 @@ class Line {
   }
 
   init() {
-    this.app.svg.selectAll('.point' + this.id )
+    this.app.pointsGr.selectAll('.point' + this.id )
       .data(this.points)
       .enter()
       .append('circle')
       .classed('point', true )
       .classed(`point${ this.id }`, true );
 
-    this.app.svg.append('path')
+    this.app.pointsGr.append('path')
       .classed(`line${ this.id }`, true)
       .style('fill', 'transparent')
       .style('stroke', this.color)
@@ -67,7 +67,7 @@ class Line {
     this.points.push(coords);
     this.points.sort((p1, p2) => p1[0] - p2[0]);
 
-    let point = this.app.svg.append('circle')
+    let point = this.app.pointsGr.append('circle')
       .classed('point', true )
       .classed(`point${ this.id }`, true );
 
@@ -77,12 +77,12 @@ class Line {
   deletePoint(index) {
     this.app.currentPoint = false;
     this.points.splice( index, 1 );
-    this.app.svg.select(`.point${ this.id }:last-child`)
+    this.app.pointsGr.select(`.point${ this.id }:last-child`)
       .remove();
   }
 
   draw() {
-    this.app.svg.selectAll(`.point${ this.id }`)
+    this.app.pointsGr.selectAll(`.point${ this.id }`)
       .data(this.points)
       .attr('id', (d, i) => `gr${ this.app.currentLine }_p${ i }` )
       .attr('cx', (d) => d[0] )
@@ -90,7 +90,7 @@ class Line {
       .attr('r', 5 )
       .style('fill', this.color );
 
-    this.app.svg.select(`.line${ this.id }`)
+    this.app.pointsGr.select(`.line${ this.id }`)
       .attr('d', this.line(this.points) );
   }
 
@@ -102,9 +102,9 @@ class Line {
   }
 
   remove() {
-    this.app.svg.selectAll(`.point${ this.id }`)
+    this.app.pointsGr.selectAll(`.point${ this.id }`)
       .remove();
-    this.app.svg.select(`.line${ this.id }`)
+    this.app.pointsGr.select(`.line${ this.id }`)
       .remove();
   }
 }

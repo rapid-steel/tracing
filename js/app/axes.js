@@ -44,12 +44,12 @@ class Axes {
     };
 
     this.points = {
-      x: false,
-      y: false
+      x: 100,
+      y: 100
     };
     this.pointsVal =  {
-      x: false,
-      y: false
+      x: 100,
+      y: 100
     };
     this.axisPoint = false;
 
@@ -157,7 +157,6 @@ class Axes {
   }
 
   setOrigins( coords ) {
-    let axisPoint = this.axisPoint;
 
     this.origin.x = coords[0] ;
     this.origin.y = this.app.sizes.height - coords[1];
@@ -167,12 +166,10 @@ class Axes {
 
     for ( let point in this.points) {
       if ( this.points[point] ) {
-        this.axisPoint = point;
-        this.setScale( this.pointsVal[point] );
+        this.setScale( this.pointsVal[point], point );
       }
     }
 
-    this.axisPoint = axisPoint;
     this.setDomainOrigins();
   }
 
@@ -196,17 +193,17 @@ class Axes {
     }
   }
 
-  setScale( value ) {
-    let size = this.axisPoint==='x' ? 'width' : 'height';
+  setScale( value, axis ) {
+    let size = axis==='x' ? 'width' : 'height';
 
-    this.pointsVal[ this.axisPoint ] = value;
+    this.pointsVal[ axis ] = value;
 
-    this.domainLength[ this.axisPoint ] = value  /
-      this.points[ this.axisPoint ] * this.lengths[ this.axisPoint ];
+    this.domainLength[ axis ] = value  /
+      this.points[ axis ] * this.lengths[ axis ];
 
-    this.domainOrigin[ this.axisPoint ] = value  /
-      this.points[ this.axisPoint ] *
-      ( this.lengths[ this.axisPoint ] - this.app.sizes[ size ] );
+    this.domainOrigin[ axis ] = value  /
+      this.points[ axis ] *
+      ( this.lengths[ axis ] - this.app.sizes[ size ] );
   }
 
   setScales() {
@@ -265,11 +262,7 @@ class Axes {
       .attr( 'transform', `translate( 0, ${ this.app.sizes.height  } )` );
 
     this.axisXgroup.select('.axisPoint')
-      .attr('cx', this.points.x )
-      .style('display',
-        this.app.editMode === 'axis' && this.axisPoint === 'x'
-          ? 'block'
-          : 'none' );
+      .attr('cx', this.points.x );
 
     this.axisXgroup.select('text.lbl')
       .text(`${ this.label.x }, ${ this.unit.x }`)
@@ -281,11 +274,7 @@ class Axes {
       .attr( 'transform', `translate( 0, ${ this.origin.y * 2 } )` );
 
     this.axisYgroup.select('.axisPoint')
-      .attr('cy', - this.origin.y + this.lengths.y - this.points.y )
-      .style('display',
-        this.app.editMode === 'axis' && this.axisPoint === 'y'
-          ? 'block'
-          : 'none' );
+      .attr('cy', - this.origin.y + this.lengths.y - this.points.y );
 
     this.axisYgroup.select('text.lbl')
       .text(`${this.label.y }, ${ this.unit.y }`)

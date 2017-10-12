@@ -17,7 +17,6 @@ class Toolbar {
       addPoint: $('.addPoint'),
       editPoint: $('.editPoint'),
       addLine: $('.addLine'),
-      saveAxisPoint: $('.saveAxisPoint')
     };
 
     this.$controls = {
@@ -28,7 +27,6 @@ class Toolbar {
         deletePoint: $('#deletePoint'),
         deleteLine: $('#deleteLine'),
         selectLine: $('#selectLine'),
-        saveAxisPoint: $('#saveAxisPoint')
     };
 
     this.$inputs = {
@@ -36,6 +34,7 @@ class Toolbar {
         origin: $('.origin'),
         label: $('.labelAxis'),
         unit: $('.unit'),
+        pointsVal: $('.pointsVal'),
 
         pointXadd: $('#pointXadd'),
         pointYadd: $('#pointYadd'),
@@ -51,8 +50,9 @@ class Toolbar {
         labelY: $('#labelY'),
         unitX: $('#unitX'),
         unitY: $('#unitY'),
+        pointsValX: $('#pointsValX'),
+        pointsValY: $('#pointsValY')
 
-        pointPosition: $('#pointPosition')
     };
 
     this.$controls.selectLine.selectBoxIt();
@@ -67,11 +67,6 @@ class Toolbar {
       this.app.axes.correctSizes();
       this.app.axes.render();
     }
-  };
-
-  checkAxisPoint( ) {
-    this.$controls.saveAxisPoint.attr('disabled',
-      !this.app.axes.axisPoint || this.$inputs.pointPosition.val() === '' );
   };
 
   changeAppMode( mode ) {
@@ -104,6 +99,14 @@ class Toolbar {
     let axis = $( event.target ).attr('id').slice( 4 ).toLowerCase();
 
     this.app.axes.unit[ axis ] = val;
+    this.app.axes.render();
+  };
+
+  setPointsVal( event ) {
+    let val = $( event.target ).val();
+    let axis = $( event.target ).attr('id').slice( 9 ).toLowerCase();
+
+    this.app.axes.setScale( val, axis );
     this.app.axes.render();
   };
 
@@ -196,7 +199,7 @@ class Toolbar {
       this[ action ]();
     });
 
-    ['addPoint', 'editPoint', 'addLine', 'saveAxisPoint'].forEach( className => {
+    ['addPoint', 'editPoint', 'addLine'].forEach( className => {
       this.$els[ className ].on('keydown', event => {
         if ( event.originalEvent.key === 'Enter' )
           this[ className ]();
@@ -215,9 +218,6 @@ class Toolbar {
 
       this[ action ]( event );
     });
-
-    this.$inputs.pointPosition.on('input',
-      () => this.checkAxisPoint() );
 
   };
 
@@ -278,14 +278,13 @@ class Toolbar {
 
   renderAxesSection() {
 
-    ['origin', 'label', 'unit'].forEach( param => {
+    ['origin', 'label', 'unit', 'pointsVal'].forEach( param => {
       ['x', 'y'].forEach( axis =>
         this.$inputs[ `${param}${axis.toUpperCase()}` ].val( this.app.axes[ param ][ axis ] ));
     });
     this.$inputs.originY.val( this.app.sizes.height - this.app.axes.origin.y );
 
     this.switchEditMode();
-    this.checkAxisPoint();
   };
 
   render() {
