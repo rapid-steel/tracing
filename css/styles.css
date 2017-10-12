@@ -46,6 +46,19 @@ input {
 .axisPoint {
   cursor: pointer; }
 
+.tick text {
+  font-size: 10px;
+  font-family: Arial;
+  font-weight: 400;
+  stroke-width: 1px;
+  stroke: black; }
+
+text.lbl {
+  font-size: 16px;
+  fill: black;
+  stroke: black;
+  font-style: italic; }
+
 .selectboxit-container {
   position: relative;
   width: 100% !important; }

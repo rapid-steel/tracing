@@ -30,7 +30,7 @@ class Line {
 
     this.app.pointsGr.append('path')
       .classed(`line${ this.id }`, true)
-      .style('fill', 'transparent')
+      .style('fill', 'none')
       .style('stroke', this.color)
       .style('stroke-width', 2);
 

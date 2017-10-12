@@ -29,15 +29,17 @@ let main = function() {
         .style('fill', 'white')
         .style('opacity', .5);
 
-      this.pointsGr = this.svg.append('g')
-        .attr('id', 'pointsGr');
-
       this.plot = this.svg.append('g')
         .attr('id', 'plotGr');
 
+      this.pointsGr = this.svg.append('g')
+        .attr('id', 'pointsGr');
+
+
       this.axes = new Axes( this );
       this.toolbar = new Toolbar( this );
-      this.lines = [new Line('line1', this)];
+      this.lines = [];
+      this.lines.push( new Line('line1', this) );
 
       this.lines[0].init();
       this.axes.init();

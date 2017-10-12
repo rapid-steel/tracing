@@ -73,9 +73,14 @@ class Axes {
       .style('fill', 'blue');
 
     this.axisXgroup.append('text')
-      .classed('lbl', true )
-      .style('stroke', 'black')
-      .style('font-size', 12 );
+      .classed('axisPointText', true )
+      .text( this.pointsVal.x )
+      .attr('y', - 20)
+      .style('stroke', 'blue')
+      .style('font-size', '14px');
+
+    this.axisXgroup.append('text')
+      .classed('lbl', true );
 
     this.axisYgroup = this.app.plot.append('g')
       .attr('id', 'axisY')
@@ -98,9 +103,14 @@ class Axes {
       .style('fill', 'blue');
 
     this.axisYgroup.append('text')
-      .classed('lbl', true )
-      .style('stroke', 'black')
-      .style('font-size', 12 );
+      .classed('axisPointText', true )
+      .text( this.pointsVal.y )
+      .attr('x', 20 )
+      .style('stroke', 'blue')
+      .style('font-size', '14px');
+
+    this.axisYgroup.append('text')
+      .classed('lbl', true );
 
     this.originPoint = this.app.svg.append('g')
       .attr('transform', `translate(0,${ this.app.sizes.height })`);
@@ -129,9 +139,12 @@ class Axes {
     let plot = $('#plot')[0];
 
     let dragAxisPoint = d3.drag()
-      .on('start', () =>
-        this.axisPoint =
-          d3.event.sourceEvent.originalTarget.id.slice(2).toLowerCase()
+      .on('start', () => {
+        console.log( d3.event.sourceEvent);
+          this.axisPoint =
+            d3.event.sourceEvent.target.id.slice(2).toLowerCase();
+      }
+
       )
       .on('drag end', () => {
         let coords = d3.mouse( plot );
@@ -257,6 +270,8 @@ class Axes {
   }
 
   drawAxes() {
+    const axisXText = `${ this.label.x }, ${ this.unit.x }`;
+
     this.axisXgroup
       .call( this.axis.x )
       .attr( 'transform', `translate( 0, ${ this.app.sizes.height  } )` );
@@ -265,9 +280,20 @@ class Axes {
       .attr('cx', this.points.x );
 
     this.axisXgroup.select('text.lbl')
-      .text(`${ this.label.x }, ${ this.unit.x }`)
-      .attr('x', this.lengths.x - 30 )
+      .text( axisXText )
+      .attr('x', this.lengths.x - axisXText.length * 5 )
       .attr('y', - 30 );
+
+    this.axisXgroup.selectAll('.tick text')
+      .attr('transform', 'translate(0, -5)')
+      .style('display', 'block')
+
+      .filter( text =>  text == this.pointsVal.x )
+      .style('display', 'none');
+
+      this.axisXgroup.select('.axisPointText')
+        .attr('x', this.points.x )
+        .text( this.pointsVal.x );
 
     this.axisYgroup
       .call( this.axis.y )
@@ -280,6 +306,17 @@ class Axes {
       .text(`${this.label.y }, ${ this.unit.y }`)
       .attr('x', 30 )
       .attr('y', 30 - this.origin.y );
+
+    this.axisYgroup.selectAll('.tick text')
+      .attr('transform', 'translate(5, 0)')
+      .style('display', 'block')
+
+      .filter( text =>  text == this.pointsVal.y )
+      .style('display', 'none');
+
+    this.axisYgroup.select('.axisPointText')
+      .attr('y', - this.origin.y + this.lengths.y - this.points.y + 4 )
+      .text( this.pointsVal.y );
 
     this.originPoint.attr('transform',
       `translate(${ this.origin.x }, ${ this.app.sizes.height - this.origin.y })`);
