@@ -57,6 +57,10 @@ class Axes {
       .attr('id', 'axisX')
       .classed('axis', true );
 
+    this.axisXgroup
+      .call( this.axis.x )
+      .attr( 'transform', `translate( 0, ${ this.app.sizes.height  } )` );
+
     this.axisXgroup.append('rect')
       .attr('x', - this.app.sizes.width)
       .attr('y', - 5 )
@@ -86,6 +90,10 @@ class Axes {
       .attr('id', 'axisY')
       .classed('axis', true );
 
+    this.axisYgroup
+      .call( this.axis.y )
+      .attr( 'transform', `translate( 0, ${ this.origin.y * 2 } )` );
+
     this.axisYgroup.append('rect')
       .attr('x', - 5 )
       .attr('y', - this.app.sizes.height )
@@ -93,7 +101,6 @@ class Axes {
       .attr('height', this.app.sizes.height * 2 )
       .classed('crosshair', true )
       .style('fill', 'transparent');
-
 
     this.axisYgroup.append('circle')
       .classed('axisPoint', true )
@@ -139,12 +146,9 @@ class Axes {
     let plot = $('#plot')[0];
 
     let dragAxisPoint = d3.drag()
-      .on('start', () => {
-        console.log( d3.event.sourceEvent);
+      .on('start', () =>
           this.axisPoint =
-            d3.event.sourceEvent.target.id.slice(2).toLowerCase();
-      }
-
+            d3.event.sourceEvent.target.id.slice(2).toLowerCase()
       )
       .on('drag end', () => {
         let coords = d3.mouse( plot );

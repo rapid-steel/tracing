@@ -1,6 +1,4 @@
 
-
-
 class Toolbar {
 
   constructor( app ) {
@@ -61,14 +59,6 @@ class Toolbar {
     this.delegateEvents();
   };
 
-  saveAxisPoint( ) {
-    if ( this.app.axes.axisPoint && this.$inputs.pointPosition.val() ) {
-      this.app.axes.setScale( this.$inputs.pointPosition.val() );
-      this.app.axes.correctSizes();
-      this.app.axes.render();
-    }
-  };
-
   changeAppMode( mode ) {
     this.app.mode = mode;
     if ( this.app.mode === 'plot')
@@ -76,14 +66,16 @@ class Toolbar {
     this.app.render();
   };
 
-  changeMode( mode ) {
-    this.app.editMode = mode;
-    this.app.svg.classed('crosshair', this.app.editMode === 'line');
-    this.switchEditMode();
-  };
-
   setOrigin( event ) {
-    this.app.setOrigins([ this.$inputs.originX.val(), this.$inputs.originY.val() ]);
+    let origins = [ parseFloat( this.$inputs.originX.val() ),
+      parseFloat( this.$inputs.originY.val() ) ];
+
+    if( origins[0] && origins[1] )
+      this.app.setOrigins( origins );
+    else {
+      this.$inputs.originX.val( this.app.axes.origin.x );
+      this.$inputs.originY.val( this.app.axes.origin.y );
+    }
   };
 
   setLabel( event ) {
@@ -103,11 +95,16 @@ class Toolbar {
   };
 
   setPointsVal( event ) {
-    let val = $( event.target ).val();
-    let axis = $( event.target ).attr('id').slice( 9 ).toLowerCase();
+    let val = parseFloat( $( event.target ).val() );
+    let $target = $( event.target );
+    let axis = $target.attr('id').slice( 9 ).toLowerCase();
 
-    this.app.axes.setScale( val, axis );
-    this.app.axes.render();
+    if ( val ) {
+      this.app.axes.setScale( val, axis );
+      this.app.axes.render();
+    } else
+      $target.val( this.app.axes.pointsVal[ axis ] );
+
   };
 
   setName() {
@@ -173,15 +170,6 @@ class Toolbar {
     this.app.lines[  currentLine ].render();
     this.renderPointSection();
   };
-
-  setAxisPoint() {
-    this.changeMode('axis');
-  };
-
-  cancelAxisPoint() {
-    this.changeMode('line');
-  };
-
 
   send() {
     this.app.send();

@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dcd864bf-8c1d-4962-ba38-089daa5f8c69" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/styles.css" afterPath="$PROJECT_DIR$/css/styles.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/styles.css.map" afterPath="$PROJECT_DIR$/css/styles.css.map" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/styles.scss" afterPath="$PROJECT_DIR$/css/styles.scss" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/app/axes.js" afterPath="$PROJECT_DIR$/js/app/axes.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/app/line.js" afterPath="$PROJECT_DIR$/js/app/line.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/app/main.js" afterPath="$PROJECT_DIR$/js/app/main.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/app/toolbar.js" afterPath="$PROJECT_DIR$/js/app/toolbar.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -23,8 +19,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
-              <caret line="49" column="29" lean-forward="true" selection-start-line="49" selection-start-column="29" selection-end-line="49" selection-end-column="29" />
+            <state relative-caret-position="541">
+              <caret line="141" column="22" lean-forward="true" selection-start-line="141" selection-start-column="22" selection-end-line="141" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -33,10 +29,10 @@
       <file leaf-file-name="toolbar.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/app/toolbar.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="16" column="24" lean-forward="false" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="24" />
+            <state relative-caret-position="663">
+              <caret line="111" column="30" lean-forward="true" selection-start-line="111" selection-start-column="30" selection-end-line="111" selection-end-column="30" />
               <folding>
-                <marker date="1507773023906" expanded="true" signature="6758:6797" ph="..." />
+                <marker date="1507790633116" expanded="true" signature="6613:6652" ph="..." />
               </folding>
             </state>
           </provider>
@@ -52,11 +48,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/app/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="612">
-              <caret line="48" column="0" lean-forward="true" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+            <state relative-caret-position="408">
+              <caret line="27" column="42" lean-forward="true" selection-start-line="27" selection-start-column="42" selection-end-line="27" selection-end-column="42" />
               <folding />
             </state>
           </provider>
@@ -72,11 +68,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="axes.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="axes.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/app/axes.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="440">
-              <caret line="143" column="26" lean-forward="true" selection-start-line="143" selection-start-column="26" selection-end-line="143" selection-end-column="26" />
+            <state relative-caret-position="-3156">
+              <caret line="102" column="36" lean-forward="true" selection-start-line="102" selection-start-column="36" selection-end-line="102" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -95,8 +91,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>call</find>
-      <find>cx</find>
       <find>originP</find>
       <find>lineN</find>
       <find>labelX</find>
@@ -121,10 +115,12 @@
       <find>points</find>
       <find>axPoint</find>
       <find>axisPoint</find>
-      <find>svg</find>
       <find>pointsVal</find>
+      <find>svg</find>
       <find>addP</find>
+      <find>saveAxis</find>
       <find>add</find>
+      <find>changeM</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -135,12 +131,12 @@
       <list>
         <option value="$PROJECT_DIR$/main.js" />
         <option value="$PROJECT_DIR$/js/main.js" />
-        <option value="$PROJECT_DIR$/js/app/toolbar.js" />
-        <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/js/app/line.js" />
         <option value="$PROJECT_DIR$/css/styles.scss" />
-        <option value="$PROJECT_DIR$/js/app/axes.js" />
         <option value="$PROJECT_DIR$/js/app/main.js" />
+        <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/js/app/toolbar.js" />
+        <option value="$PROJECT_DIR$/js/app/axes.js" />
       </list>
     </option>
   </component>
@@ -391,12 +387,12 @@
       <workItem from="1507330205083" duration="10642000" />
       <workItem from="1507362179492" duration="7842000" />
       <workItem from="1507380904373" duration="56000" />
-      <workItem from="1507766129019" duration="10994000" />
+      <workItem from="1507766129019" duration="12683000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="139625000" />
+    <option name="totallyTimeSpent" value="141314000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1296" height="1010" extended-state="6" />
@@ -760,10 +756,10 @@
     <entry file="file://$PROJECT_DIR$/test/Скриншот 2017-10-05 09.30.19.png" />
     <entry file="file://$PROJECT_DIR$/archive/main.js" />
     <entry file="file://$PROJECT_DIR$/src/javascripts/modules/jquery.selectBoxIt.add.js" />
-    <entry file="file://$PROJECT_DIR$/index.html">
+    <entry file="file://$PROJECT_DIR$/css/styles.scss">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="49" column="29" lean-forward="true" selection-start-line="49" selection-start-column="29" selection-end-line="49" selection-end-column="29" />
+        <state relative-caret-position="371">
+          <caret line="48" column="0" lean-forward="true" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -776,36 +772,36 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/css/styles.scss">
+    <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="371">
-          <caret line="48" column="0" lean-forward="true" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/app/toolbar.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="24" lean-forward="false" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="24" />
-          <folding>
-            <marker date="1507773023906" expanded="true" signature="6758:6797" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/app/axes.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="143" column="26" lean-forward="true" selection-start-line="143" selection-start-column="26" selection-end-line="143" selection-end-column="26" />
+        <state relative-caret-position="541">
+          <caret line="141" column="22" lean-forward="true" selection-start-line="141" selection-start-column="22" selection-end-line="141" selection-end-column="22" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/app/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="48" column="0" lean-forward="true" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+        <state relative-caret-position="408">
+          <caret line="27" column="42" lean-forward="true" selection-start-line="27" selection-start-column="42" selection-end-line="27" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/app/toolbar.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="663">
+          <caret line="111" column="30" lean-forward="true" selection-start-line="111" selection-start-column="30" selection-end-line="111" selection-end-column="30" />
+          <folding>
+            <marker date="1507790633116" expanded="true" signature="6613:6652" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/app/axes.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3156">
+          <caret line="102" column="36" lean-forward="true" selection-start-line="102" selection-start-column="36" selection-end-line="102" selection-end-column="36" />
           <folding />
         </state>
       </provider>
