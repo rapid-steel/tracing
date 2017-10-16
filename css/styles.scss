@@ -12,11 +12,53 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0;
 }
 
+#view-toolbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 75%;
+  z-index: 100;
+  text-align: center;
+  font-weight: 800;
+  font-size: 22px;
+  background-color: white;
+  border-bottom: 1px solid grey;
+}
+
 input[type=number] { -moz-appearance:textfield; }
 
 input { text-align: center; }
 
 .setPointOn { display: none; }
+
+.view-control {
+  display: inline-block;
+  padding: 0;
+  line-height: 50px;
+}
+
+.zoom,
+.page-control {
+  margin: 0 5px!important;
+  padding: 0 0 6px 0!important;
+  width: 50px;
+  line-height: 30px;
+  font-size: 30px;
+  opacity: 1;
+  &.disabled{ opacity: .4; }
+}
+
+#pages {
+  margin-left: 15px;
+}
+
+.view-control-input {
+  display: inline-block;
+  margin: 0;
+  padding: 0!important;
+  width: 75px;
+  font-size: 20px;
+}
 
 .container-fluid,
 .container-fluid > div,
@@ -25,7 +67,22 @@ input { text-align: center; }
 #toolbar { position: relative; height: 100%; }
 
 #document-container { padding: 0; }
-#document { width: 100%; }
+#document {
+  width: 100%;
+  position: relative;
+}
+
+.page-container,
+#doc-image,
+.loading {
+  display: block;
+  margin: 0 auto;
+}
+
+.page-container {
+  width: auto;
+  text-align: center;
+}
 
 #plot {
   position: absolute;

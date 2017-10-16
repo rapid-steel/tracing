@@ -1,7 +1,9 @@
 let main = function() {
 
   let app = {
-    init() {
+    init( url ) {
+
+      this.docUrl = url;
 
       this.mode = 'read';
       this.editMode = 'line';
@@ -38,12 +40,14 @@ let main = function() {
 
       this.axes = new Axes( this );
       this.toolbar = new Toolbar( this );
+      this.viewer = new Viewer( this );
       this.lines = [];
       this.lines.push( new Line('line1', this) );
 
       this.lines[0].init();
       this.axes.init();
       this.toolbar.init();
+      this.viewer.init();
 
     },
 
@@ -96,6 +100,8 @@ let main = function() {
     render() {
       this.svg.style('display', this.mode === 'plot' ? 'block' : 'none')
         .classed('crosshair', true);
+
+      this.viewer.$toolbar.css('display', this.mode === 'read' ? 'block' : 'none');
 
       this.lines[ this.currentLine ].render();
       this.axes.render();
@@ -161,7 +167,22 @@ let main = function() {
     },
 
     send() {
+      let location = {
+        x: this.viewer.doc.scrollLeft,
+        y: this.viewer.doc.scrollTop,
+        scale: this.viewer.scale,
+        width: this.viewer.mode === 'pdf'
+          ? this.viewer.pageWidth
+          : this.viewer.$img[0].naturalWidth,
+
+        offsetX: this.viewer.mode === 'pdf'
+          ? this.viewer.$currentPage.find('.page').position().left + this.viewer.doc.scrollLeft
+          : this.viewer.$img.offset().left + this.viewer.doc.scrollLeft,
+      };
+
+
       let data = {
+        location: location,
         axesOrigin: this.axes.origin,
         points: this.axes.points,
         point: this.axes.pointsVal,
@@ -181,15 +202,11 @@ let main = function() {
 
   };
 
-  app.init();
+
+
+  app.init( url );
   app.delegateEvents();
   app.render();
-
-
-
-
-
-
 
 
 
