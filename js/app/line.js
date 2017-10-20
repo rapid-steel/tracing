@@ -1,8 +1,9 @@
 class Line {
 
-  constructor( name, app ) {
+  constructor( name, app, plot ) {
     this.name = name;
     this.app = app;
+    this.plot = plot;
 
     this.id = Math.floor(Math.random() * 10000);
     this.setColor();
@@ -21,12 +22,16 @@ class Line {
   }
 
   init() {
+
+    this.initDrag();
+
     this.app.pointsGr.selectAll('.point' + this.id )
       .data(this.points)
       .enter()
       .append('circle')
       .classed('point', true )
-      .classed(`point${ this.id }`, true );
+      .classed(`point${ this.id }`, true )
+      .call( this.drag );
 
     this.app.pointsGr.append('path')
       .classed(`line${ this.id }`, true)
@@ -34,7 +39,6 @@ class Line {
       .style('stroke', this.color)
       .style('stroke-width', 2);
 
-    this.initDrag();
   }
 
   initDrag() {
@@ -63,8 +67,9 @@ class Line {
       });
   }
 
-  addPoint(coords) {
-    this.points.push(coords);
+  addPoint( coords ) {
+
+    this.points.push( coords );
     this.points.sort((p1, p2) => p1[0] - p2[0]);
 
     let point = this.app.pointsGr.append('circle')

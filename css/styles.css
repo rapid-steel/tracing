@@ -76,12 +76,13 @@ input {
 .page-container,
 #doc-image,
 .loading {
-  display: block;
+  display: block; }
+
+.loading {
   margin: 0 auto; }
 
 .page-container {
-  width: auto;
-  text-align: center; }
+  width: auto; }
 
 #plot {
   position: absolute;

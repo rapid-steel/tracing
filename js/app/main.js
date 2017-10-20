@@ -1,15 +1,12 @@
 let main = function() {
 
-  let app = {
-    init( url ) {
+    let app = {
+    init( doc ) {
 
-      this.docUrl = url;
+      this.doc = doc;
+      this.docUrl = doc.url;
 
       this.mode = 'read';
-      this.editMode = 'line';
-
-      this.currentLine = 0;
-      this.currentPoint = false;
 
       this.$container = $('#document');
       this.sizes = {
@@ -31,24 +28,26 @@ let main = function() {
         .style('fill', 'white')
         .style('opacity', .5);
 
-      this.plot = this.svg.append('g')
-        .attr('id', 'plotGr');
+      this.plotGr = this.svg.append('g');
+      this.pointsGr = this.svg.append('g');
 
-      this.pointsGr = this.svg.append('g')
-        .attr('id', 'pointsGr');
-
-
-      this.axes = new Axes( this );
       this.toolbar = new Toolbar( this );
       this.viewer = new Viewer( this );
-      this.lines = [];
-      this.lines.push( new Line('line1', this) );
 
-      this.lines[0].init();
-      this.axes.init();
       this.toolbar.init();
       this.viewer.init();
 
+      this.currentPlot = 0;
+      this.currentLine = 0;
+      this.currentPoint = false;
+
+      this.plots = [];
+      if( doc.plots.length )
+        doc.plots.forEach( plot => this.plots.push(new Plot(this, plot )) );
+      else
+        this.plots.push(new Plot( this ));
+
+      this.plots[ 0 ].init();
     },
 
     delegateEvents()  {
@@ -61,23 +60,7 @@ let main = function() {
 
         } else {
           let coord = d3.mouse($('#plot')[0]);
-          this.currentPoint = false;
-
-          switch ( this.editMode ) {
-            case 'axis':
-              let axis = $(d3.event.target).parents('.axis')[0];
-
-              if ( axis ) {
-                let id = axis.id.slice( 4 ).toLowerCase();
-                this.setPoint( coord, id );
-              }
-              break;
-
-            case 'line':
-              this.addPoint( coord );
-
-              break;
-          }
+          this.addPoint( coord );
         }
       });
 
@@ -92,9 +75,23 @@ let main = function() {
       });
 
       $(window).on('resize', () => {
-        this.axes.correctSizes();
-        this.axes.render();
+        this.plots[ this.currentPlot ].axes.correctSizes();
+        this.render();
+
       });
+    },
+
+    removePlot() {
+
+      this.plotGr.remove();
+      this.pointsGr.remove();
+      this.svg.select('.originPoint').remove();
+
+      this.plotGr = this.svg.append('g');
+      this.pointsGr = this.svg.append('g');
+
+      this.currentLine = 0;
+      this.currentPoint = false;
     },
 
     render() {
@@ -103,9 +100,46 @@ let main = function() {
 
       this.viewer.$toolbar.css('display', this.mode === 'read' ? 'block' : 'none');
 
-      this.lines[ this.currentLine ].render();
-      this.axes.render();
+      this.plots[ this.currentPlot ].lines[ this.currentLine ].render();
+      this.plots[ this.currentPlot ].axes.render();
       this.toolbar.render();
+    },
+
+    addPlot( name ) {
+      this.plots.push(new Plot( this ));
+      this.currentPlot = this.plots.length - 1;
+      this.plots[ this.currentPlot ].name = name || 'Plot' + this.plots.length;
+
+      this.removePlot();
+      this.plots[ this.currentPlot ].init();
+      this.plots[ this.currentPlot ].axes.correctSizes();
+      this.render();
+    },
+
+    selectPlot( ) {
+      this.removePlot();
+      if ( this.plots[ this.currentPlot ].location )
+        this.viewer.scrollTo( this.plots[ this.currentPlot ].location );
+
+      this.plots[ this.currentPlot ].init();
+      this.plots[ this.currentPlot ].axes.correctSizes();
+      this.plots[ this.currentPlot ].lines.forEach( line => line.render() );
+      this.render();
+    },
+
+    deletePlot() {
+      this.removePlot();
+      this.plots.splice( this.currentPlot, 1 );
+      if( this.plots.length === +this.currentPlot )
+        this.currentPlot--;
+
+      if ( this.plots[ this.currentPlot ].location )
+        this.viewer.scrollTo( this.plots[ this.currentPlot ].location );
+
+      this.plots[ this.currentPlot ].axes.correctSizes();
+      this.plots[ this.currentPlot ].initDraw();
+      this.plots[ this.currentPlot ].lines.forEach( line => line.render() );
+      this.render();
     },
 
 
@@ -117,94 +151,100 @@ let main = function() {
       this.toolbar.renderPointSection();
     },
 
-
     addPoint( coord ) {
-      this.lines[ this.currentLine ].addPoint( coord );
-
-      this.lines[ this.currentLine ].render();
+      this.plots[ this.currentPlot ].lines[ this.currentLine ].addPoint( coord );
+      this.plots[ this.currentPlot ].lines[ this.currentLine ].render();
       this.toolbar.renderLinesSection();
       this.toolbar.renderPointSection();
     },
 
     deletePoint( ids ) {
       this.currentLine = + ids[0].slice(2);
-      this.lines[ this.currentLine ].deletePoint( + ids[1].slice(1) );
+      this.plots[ this.currentPlot ].lines[ this.currentLine ].deletePoint( + ids[1].slice(1) );
 
-      this.lines[ this.currentLine ].render();
+      this.plots[ this.currentPlot ].lines[ this.currentLine ].render();
       this.toolbar.renderPointSection();
       this.toolbar.renderLinesSection();
     },
 
     setPoint( coord, id ) {
-      this.axes.setPoint( coord, id );
-      this.axes.setScale( this.axes.pointsVal[id], id );
+      this.plots[ this.currentPlot ].axes.setPoint( coord, id );
+      this.plots[ this.currentPlot ].axes.setScale( this.plots[ this.currentPlot ].axes.pointsVal[id], id );
       this.toolbar.renderAxesSection();
-      this.axes.render();
+      this.plots[ this.currentPlot ].axes.render();
     },
 
     addLine( name ) {
       if ( name === '' )
-        name = 'line' + ( this.lines.length + 1 );
+        name = 'line' + ( this.plots[ this.currentPlot ].lines.length + 1 );
 
-      this.lines.push( new Line( name, this ) );
-      this.currentLine = this.lines.length - 1;
+      this.plots[ this.currentPlot ].lines.push( new Line( name, this ) );
+      this.currentLine = this.plots[ this.currentPlot ].lines.length - 1;
 
-      this.lines[ this.currentLine ].init();
+      this.plots[ this.currentPlot ].lines[ this.currentLine ].init();
 
       this.currentPoint = false;
 
-      this.lines[ this.currentLine ].render();
+      this.plots[ this.currentPlot ].lines[ this.currentLine ].render();
       this.toolbar.renderPointSection();
       this.toolbar.renderLinesSection();
     },
 
     setOrigins( coord )  {
-      this.axes.setOrigins( coord );
+      this.plots[ this.currentPlot ].axes.setOrigins( coord );
 
-      this.axes.render();
+      this.plots[ this.currentPlot ].axes.render();
       this.toolbar.renderAxesSection();
       this.toolbar.renderPointSection();
     },
 
     send() {
-      let location = {
-        x: this.viewer.doc.scrollLeft,
-        y: this.viewer.doc.scrollTop,
-        scale: this.viewer.scale,
-        width: this.viewer.mode === 'pdf'
-          ? this.viewer.pageWidth
-          : this.viewer.$img[0].naturalWidth,
 
-        offsetX: this.viewer.mode === 'pdf'
-          ? this.viewer.$currentPage.find('.page').position().left + this.viewer.doc.scrollLeft
-          : this.viewer.$img.offset().left + this.viewer.doc.scrollLeft,
-      };
+      this.doc.plots = [];
 
+      this.plots.forEach( plot => {
+      if (!plot.location)
+        plot.saveLocation();
 
       let data = {
-        location: location,
-        axesOrigin: this.axes.origin,
-        points: this.axes.points,
-        point: this.axes.pointsVal,
-        labels: this.axes.label,
-        units: this.axes.unit,
-        graphs: []
+        name: plot.name,
+        location: plot.location,
+        origin: [
+          plot.axes.origin.x, this.sizes.height - plot.axes.origin.y ],
+        points: plot.axes.points,
+        pointsVal: plot.axes.pointsVal,
+        label: plot.axes.label,
+        unit: plot.axes.unit,
+        lines: []
       };
 
-      this.lines.forEach( line =>
-        data.graphs.push({
+      plot.lines.forEach(line =>
+        data.lines.push({
+          color: line.color,
           name: line.name,
           points: line.points
         }));
 
-      console.log( data );
+      this.doc.plots.push(data);
+
+    });
+
+      console.log( this.doc.plots );
+      this.saveDoc();
+    },
+
+    saveDoc() {
+      docList[id] = this.doc;
+      window.localStorage.setItem('docListPlots', JSON.stringify(docList));
     }
 
   };
 
 
+  let docList = JSON.parse( window.localStorage.getItem('docListPlots') );
+  let doc = docList[id];
 
-  app.init( url );
+  app.init( doc );
   app.delegateEvents();
   app.render();
 

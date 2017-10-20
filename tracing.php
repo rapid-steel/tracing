@@ -34,10 +34,11 @@
 
     </div>
 
+	<div class="view-control ml-2 font-weight-bold" id="location">
+		<i class="fa fa-lock" aria-hidden="true"></i>
+	</div>
+
 </div>
-
-
-
 
 
 <div id="app-container" class="container-fluid">
@@ -45,12 +46,46 @@
         <div class="col-9" id="document-container">
 					<div id="document" style="overflow: scroll">
 					</div>
-
-
-
         </div>
 
         <div class="col-3" id="toolbar">
+
+					<hr>
+
+					<div class="col text-center">
+						Add plot
+					</div>
+
+					<div class="row">
+						<div class="col-8 offset-1">
+							<input class="addPlot form-control" id="newPlotName">
+						</div>
+						<button class="btn btn-primary col-2 toolbar-control" id="addPlot" title="Add plot">
+							<i class="fa fa-plus" aria-hidden="true"></i>
+						</button>
+					</div>
+
+					<div class="col text-center">
+						Current plot
+					</div>
+
+					<div class="row">
+
+						<div class="col-8 offset-1">
+							<input class="form-control toolbar-input" type="text" id="nameP">
+						</div>
+
+							<button class="col-2 btn btn-primary ml-2 toolbar-control plot-control" id="deletePlot" title="Delete plot">
+								<i class="fa fa-trash" aria-hidden="true"></i>
+							</button>
+
+					</div>
+
+					<div class="row">
+						<div class="col-8 offset-1">
+							<select class="form-control" id="selectPlot"></select>
+						</div>
+					</div>
 
 					<hr>
 
@@ -65,7 +100,7 @@
 
 					</div>
 
-            <hr>
+					<hr>
 
             <div class="col addPoint text-center">
                 Add point
@@ -201,12 +236,15 @@
 
 <script>
 
-  var url = "test/x028.gif";
+	<?php
+		echo "let id = '$_GET[doc_id]';"
+	?>
 
 </script>
 
 <script src="js/app/axes.js"></script>
 <script src="js/app/line.js"></script>
+<script src="js/app/plot.js"></script>
 <script src="js/app/toolbar.js"></script>
 <script src="js/app/viewer.js"></script>
 <script src="js/app/main.js"></script>

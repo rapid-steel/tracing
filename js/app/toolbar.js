@@ -10,20 +10,22 @@ class Toolbar {
 
   init( ) {
     this.$els = {
-      setPointOn: $('.setPointOn'),
-      setPointOff: $('.setPointOff'),
+      addPlot: $('.addPlot'),
       addPoint: $('.addPoint'),
       editPoint: $('.editPoint'),
       addLine: $('.addLine'),
     };
 
     this.$controls = {
-      appMode: $('.appMode'),
+        appMode: $('.appMode'),
         toolbarControl: $('.toolbar-control'),
+        addPlot: $('#addPlot'),
+        deletePlot: $('#deletePlot'),
         addPoint: $('#addPoint'),
         editPoint: $('#editPoint'),
         deletePoint: $('#deletePoint'),
         deleteLine: $('#deleteLine'),
+        selectPlot: $('#selectPlot'),
         selectLine: $('#selectLine'),
     };
 
@@ -38,6 +40,9 @@ class Toolbar {
         pointYadd: $('#pointYadd'),
         pointXedit: $('#pointXedit'),
         pointYedit: $('#pointYedit'),
+
+        plotName: $('#nameP'),
+        newPlotName: $('#newPlotName'),
 
         lineName: $('#nameL'),
         newLineName: $('#newLineName'),
@@ -56,13 +61,20 @@ class Toolbar {
     this.$controls.selectLine.selectBoxIt();
     this.selectBox =  this.$controls.selectLine.data('selectBox-selectBoxIt');
 
+    this.$controls.selectPlot.selectBoxIt();
+    this.selectBoxPlot =  this.$controls.selectPlot.data('selectBox-selectBoxIt');
+
     this.delegateEvents();
   };
 
   changeAppMode( mode ) {
     this.app.mode = mode;
-    if ( this.app.mode === 'plot')
-      this.app.axes.correctSizes();
+    if ( this.app.mode === 'plot') {
+      if ( this.app.plots[ this.app.currentPlot ].location )
+        this.app.viewer.scrollTo( this.app.plots[ this.app.currentPlot ].location );
+      this.app.plots[ this.app.currentPlot ].axes.correctSizes();
+    }
+
     this.app.render();
   };
 
@@ -73,8 +85,8 @@ class Toolbar {
     if( origins[0] && origins[1] )
       this.app.setOrigins( origins );
     else {
-      this.$inputs.originX.val( this.app.axes.origin.x );
-      this.$inputs.originY.val( this.app.axes.origin.y );
+      this.$inputs.originX.val( this.app.plots[ this.app.currentPlot ].axes.origin.x );
+      this.$inputs.originY.val( this.app.plots[ this.app.currentPlot ].axes.origin.y );
     }
   };
 
@@ -82,16 +94,16 @@ class Toolbar {
     let val = $( event.target ).val();
     let axis = $( event.target ).attr('id').slice( 5 ).toLowerCase();
 
-    this.app.axes.label[ axis ] = val;
-    this.app.axes.render();
+    this.app.plots[ this.app.currentPlot ].axes.label[ axis ] = val;
+    this.app.plots[ this.app.currentPlot ].axes.render();
   };
 
   setUnit( event ) {
     let val = $( event.target ).val();
     let axis = $( event.target ).attr('id').slice( 4 ).toLowerCase();
 
-    this.app.axes.unit[ axis ] = val;
-    this.app.axes.render();
+    this.app.plots[ this.app.currentPlot ].axes.unit[ axis ] = val;
+    this.app.plots[ this.app.currentPlot ].axes.render();
   };
 
   setPointsVal( event ) {
@@ -100,15 +112,29 @@ class Toolbar {
     let axis = $target.attr('id').slice( 9 ).toLowerCase();
 
     if ( val ) {
-      this.app.axes.setScale( val, axis );
-      this.app.axes.render();
+      this.app.plots[ this.app.currentPlot ].axes.setScale( val, axis );
+      this.app.plots[ this.app.currentPlot ].axes.render();
     } else
-      $target.val( this.app.axes.pointsVal[ axis ] );
+      $target.val( this.app.plots[ this.app.currentPlot ].axes.pointsVal[ axis ] );
 
   };
 
+  addPlot() {
+    this.app.addPlot( this.$inputs.newPlotName.val() );
+    this.$inputs.newPlotName.val('');
+  }
+
+  changePlot() {
+    this.app.currentPlot = this.$controls.selectPlot.val();
+    this.app.selectPlot();
+  }
+
+  deletePlot() {
+    this.app.deletePlot();
+  }
+
   setName() {
-    this.app.lines[ this.app.currentLine ].name = this.$inputs.lineName.val();
+    this.app.plots[ this.app.currentPlot ].lines[ this.app.currentLine ].name = this.$inputs.lineName.val();
     this.renderLinesSection();
   };
 
@@ -124,12 +150,12 @@ class Toolbar {
   };
 
   deleteLine() {
-    this.app.lines[ this.app.currentLine ].remove();
-    this.app.lines.splice( this.app.currentLine, 1 );
-    if( this.app.lines.length === this.app.currentLine )
+    this.app.plots[ this.app.currentPlot ].lines[ this.app.currentLine ].remove();
+    this.app.plots[ this.app.currentPlot ].lines.splice( this.app.currentLine, 1 );
+    if( this.app.plots[ this.app.currentPlot ].lines.length === this.app.currentLine )
       this.app.currentLine--;
 
-    this.app.lines[  this.app.currentLine ].render();
+    this.app.plots[ this.app.currentPlot ].lines[  this.app.currentLine ].render();
     this.renderPointSection();
     this.renderLinesSection();
   };
@@ -140,8 +166,10 @@ class Toolbar {
 
     if ( x && y ) {
       this.app.addPoint([
-        this.app.axes.scale.x( x ) + this.app.axes.origin.x,
-        this.app.axes.scale.y( y ) + this.app.axes.origin.y
+        this.app.plots[ this.app.currentPlot ].axes.scale.x( x )
+        + this.app.plots[ this.app.currentPlot ].axes.origin.x,
+        this.app.plots[ this.app.currentPlot ].axes.scale.y( y )
+        + this.app.plots[ this.app.currentPlot ].axes.origin.y
       ]);
 
       this.$inputs.pointXadd.val('');
@@ -154,20 +182,22 @@ class Toolbar {
         y = parseFloat( this.$inputs.pointYedit.val() );
 
     if ( x && y ) {
-      this.app.lines[ this.app.currentLine ].points[ this.app.currentPoint ] =
-        [ this.app.axes.scale.x( x ) + this.app.axes.origin.x,
-          this.app.axes.scale.y( y ) + this.app.axes.origin.y ];
+      this.app.plots[ this.app.currentPlot ].lines[ this.app.currentLine ].points[ this.app.currentPoint ] =
+        [ this.app.plots[ this.app.currentPlot ].axes.scale.x( x )
+        + this.app.plots[ this.app.currentPlot ].axes.origin.x,
+          this.app.plots[ this.app.currentPlot ].axes.scale.y( y )
+          + this.app.plots[ this.app.currentPlot ].axes.origin.y ];
 
-      this.app.lines[ this.app.currentLine ].render();
+      this.app.plots[ this.app.currentPlot ].lines[ this.app.currentLine ].render();
       this.renderPointSection();
     }
   };
 
   deletePoint() {
-    this.app.lines[ this.app.currentLine ].deletePoint( this.app.currentPoint );
+    this.app.plots[ this.app.currentPlot ].lines[ this.app.currentLine ].deletePoint( this.app.currentPoint );
     this.app.currentPoint = false;
 
-    this.app.lines[  currentLine ].render();
+    this.app.plots[ this.app.currentPlot ].lines[  currentLine ].render();
     this.renderPointSection();
   };
 
@@ -194,10 +224,12 @@ class Toolbar {
       });
     });
 
+    ['Line', 'Plot'].forEach( name => {
+      this.$controls[`select${ name }`].on('change',
+        () => this[`change${ name }`]() );
+    });
 
 
-    this.$controls.selectLine.on('change',
-      () => this.changeLine() );
 
     this.$inputs.toolbarInput.on('change', event => {
       let prop = event.target.id;
@@ -209,18 +241,31 @@ class Toolbar {
 
   };
 
-  switchEditMode() {
-    this.$els.setPointOn.css( 'display',
-      this.app.editMode === 'axis'
-        ? 'block'
-        : 'none');
-    this.$els.setPointOff.css('display',
-      this.app.editMode === 'line'
-        ? 'block'
-        : 'none');
 
-    this.app.axes.render();
-  };
+  renderPlotSection() {
+
+    this.$inputs.plotName.val(
+      this.app.plots[ this.app.currentPlot ].name );
+    this.$controls.deletePlot.attr('disabled',
+      this.app.plots.length < 2 );
+
+    this.$controls.selectPlot.empty();
+
+    this.app.plots.forEach( (plot, index) => {
+
+      let option = `
+          <option value="${index}" data-text='
+            <span>
+              ${plot.name}
+            </span>'>                   
+          </option>`;
+
+      this.$controls.selectPlot.append( option );
+    });
+
+    this.$controls.selectPlot.val( this.app.currentPlot );
+    this.selectBoxPlot.refresh();
+  }
 
   renderPointSection() {
 
@@ -230,9 +275,9 @@ class Toolbar {
 
       ['x', 'y'].forEach( axis =>
         this.$inputs[ `point${axis.toUpperCase()}edit` ].val(
-          this.app.axes.scale[ axis ].invert(
-            this.app.lines[ this.app.currentLine ].points[ this.app.currentPoint ][0]
-            - this.app.axes.origin[ axis ] )) );
+          this.app.plots[ this.app.currentPlot ].axes.scale[ axis ].invert(
+            this.app.plots[ this.app.currentPlot ].lines[ this.app.currentLine ].points[ this.app.currentPoint ][0]
+            - this.app.plots[ this.app.currentPlot ].axes.origin[ axis ] )) );
 
     } else {
       this.$els.addPoint.show();
@@ -242,12 +287,14 @@ class Toolbar {
 
   renderLinesSection() {
 
-    this.$inputs.lineName.val( this.app.lines[this.app.currentLine].name );
-    this.$controls.deleteLine.attr('disabled', this.app.lines.length < 2 );
+    this.$inputs.lineName.val(
+      this.app.plots[ this.app.currentPlot ].lines[this.app.currentLine].name );
+    this.$controls.deleteLine.attr('disabled',
+      this.app.plots[ this.app.currentPlot ].lines.length < 2 );
 
     this.$controls.selectLine.empty();
 
-    this.app.lines.forEach( (line, index) => {
+    this.app.plots[ this.app.currentPlot ].lines.forEach( (line, index) => {
 
       let option = `
           <option value="${index}" data-text='
@@ -268,11 +315,12 @@ class Toolbar {
 
     ['origin', 'label', 'unit', 'pointsVal'].forEach( param => {
       ['x', 'y'].forEach( axis =>
-        this.$inputs[ `${param}${axis.toUpperCase()}` ].val( this.app.axes[ param ][ axis ] ));
+        this.$inputs[ `${param}${axis.toUpperCase()}` ].val(
+          this.app.plots[ this.app.currentPlot ].axes[ param ][ axis ] ));
     });
-    this.$inputs.originY.val( this.app.sizes.height - this.app.axes.origin.y );
+    this.$inputs.originY.val(
+      this.app.sizes.height - this.app.plots[ this.app.currentPlot ].axes.origin.y );
 
-    this.switchEditMode();
   };
 
   render() {
@@ -286,6 +334,7 @@ class Toolbar {
         : $control.addClass('btn-outline-primary');
     });
 
+    this.renderPlotSection();
     this.renderPointSection();
     this.renderAxesSection();
     this.renderLinesSection();

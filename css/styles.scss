@@ -76,12 +76,15 @@ input { text-align: center; }
 #doc-image,
 .loading {
   display: block;
+
+}
+
+.loading {
   margin: 0 auto;
 }
 
 .page-container {
   width: auto;
-  text-align: center;
 }
 
 #plot {
@@ -111,6 +114,7 @@ text.lbl {
   stroke: black;
   font-style: italic;
 }
+
 
 
 

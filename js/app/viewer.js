@@ -31,7 +31,8 @@ class Viewer {
       prevPage: $('#prev-page'),
       nextPage: $('#next-page'),
       pageNumber: $('#page-number'),
-      pageCount: $('#page-count')
+      pageCount: $('#page-count'),
+      location: $('#location')
     };
 
     this.$toolbar = $('#view-toolbar');
@@ -58,12 +59,14 @@ class Viewer {
         this.delegateEventsImage();
         break;
     }
+
+    this.$controls.location.on('click', () => this.savePlotLocation() );
   }
 
   initPdf() {
 
 
-    PDFJS.getDocument( this.app.docUrl )
+    PDFJS.getDocument( 'getdoc.php?url=' + this.app.docUrl )
       .then( pdf => {
         this.docPDF = pdf;
         this.currentPageNumber = 1;
@@ -164,7 +167,7 @@ class Viewer {
 
   }
 
-  renderPdf( scale ) {
+  renderPdf( scale, scroll ) {
     let oldScale = this.scale;
     let oldScrollTop = this.doc.scrollTop;
 
@@ -186,6 +189,10 @@ class Viewer {
 
         if ( num === this.pageCount ) {
           this.doc.scrollTop = oldScrollTop /  oldScale * this.scale;
+          if ( scroll ) {
+            this.doc.scrollTop = scroll.y;
+            this.doc.scrollLeft = scroll.x;
+          }
         }
       });
     }
@@ -262,6 +269,10 @@ class Viewer {
 
   }
 
+  savePlotLocation() {
+    this.app.plots[ this.app.currentPlot ].saveLocation();
+  }
+
 
   renderPanel() {
 
@@ -307,6 +318,21 @@ class Viewer {
     }
 
     return scale;
+  }
+
+  scrollTo( location ) {
+
+    switch ( this.mode ) {
+      case 'pdf':
+        this.renderPdf( location.scale, {x: location.x, y: location.y} );
+        break;
+
+      case 'image':
+        this.scale = location.scale;
+        this.img.style.width = this.imgWidth * this.scale + 'px';
+        break;
+    }
+    this.renderPanel();
   }
 
 

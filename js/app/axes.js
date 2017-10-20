@@ -1,10 +1,18 @@
 class Axes {
 
-  constructor( app ) {
+  constructor( app, plot ) {
     this.app = app;
+    this.plot = plot;
   }
 
   init() {
+
+    this.initVals();
+
+    this.initDraw();
+  }
+
+  initVals() {
 
     this.origin = {
       x: this.app.sizes.width / 2,
@@ -53,7 +61,11 @@ class Axes {
     };
     this.axisPoint = false;
 
-    this.axisXgroup = this.app.plot.append('g')
+  }
+
+  initDraw() {
+
+    this.axisXgroup = this.app.plotGr.append('g')
       .attr('id', 'axisX')
       .classed('axis', true );
 
@@ -86,7 +98,7 @@ class Axes {
     this.axisXgroup.append('text')
       .classed('lbl', true );
 
-    this.axisYgroup = this.app.plot.append('g')
+    this.axisYgroup = this.app.plotGr.append('g')
       .attr('id', 'axisY')
       .classed('axis', true );
 
@@ -120,6 +132,7 @@ class Axes {
       .classed('lbl', true );
 
     this.originPoint = this.app.svg.append('g')
+      .classed('originPoint', true)
       .attr('transform', `translate(0,${ this.app.sizes.height })`);
 
     this.originPoint.append('rect')
@@ -140,6 +153,12 @@ class Axes {
       .classed('originPoint', true);
 
     this.callDrag();
+
+    this.originPoint.attr('transform',
+      `translate(${ this.origin.x }, ${ this.app.sizes.height - this.origin.y })`);
+
+    this.app.plotGr.attr('transform',
+      `translate( ${ this.origin.x }, ${ - this.origin.y } )` );
   }
 
   callDrag() {
@@ -244,8 +263,8 @@ class Axes {
     let oldLengthX = this.lengths.x;
 
     this.app.sizes = {
-      width: this.app.$container.prop('scrollWidth'),
-      height: this.app.$container.height()
+      width: this.app.$container.width(),
+      height: $('#document-container').height()
     };
 
     this.app.svg.attr('width', this.app.sizes.width )
@@ -255,22 +274,12 @@ class Axes {
       .attr('height', this.app.sizes.height );
 
     this.lengths.x = this.lengths.x + this.app.sizes.width - oldSizes.width;
-    if (this.lengths.x < 0) {
-      this.origin.x = this.app.sizes.width;
-      this.lengths.x = 0;
-    }
-
     this.origin.y = this.origin.y + this.app.sizes.height - oldSizes.height;
-    if (this.origin.y < 0) {
-      this.origin.y = 0;
-      this.lengths.y = this.app.sizes.height;
-    }
 
-    this.domainLength.x = this.domainLength.x + this.lengths.x - oldLengthX;
-    if ( this.points.x )
-      this.setScale( this.pointsVal.x );
+    this.domainLength.x += this.lengths.x - oldLengthX;
+this.setScale( this.pointsVal.x, 'x');
+    this.setScale( this.pointsVal.y, 'y');
 
-    this.setDomainOrigins();
   }
 
   drawAxes() {
@@ -325,7 +334,7 @@ class Axes {
     this.originPoint.attr('transform',
       `translate(${ this.origin.x }, ${ this.app.sizes.height - this.origin.y })`);
 
-    this.app.plot.attr('transform',
+    this.app.plotGr.attr('transform',
       `translate( ${ this.origin.x }, ${ - this.origin.y } )` );
 
   }
