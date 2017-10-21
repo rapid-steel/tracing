@@ -71,9 +71,13 @@
 
 					<div class="row">
 
-						<div class="col-8 offset-1">
-							<input class="form-control toolbar-input" type="text" id="nameP">
+						<div class="col-6 offset-1">
+							<input class="form-control toolbar-input" type="text" id="plotNameP">
 						</div>
+
+						<button class="col-2 btn btn-primary ml-2 toolbar-control plot-control" id="jumpToPlot" title="Delete plot">
+							<i class="fa fa-crosshairs" aria-hidden="true"></i>
+						</button>
 
 							<button class="col-2 btn btn-primary ml-2 toolbar-control plot-control" id="deletePlot" title="Delete plot">
 								<i class="fa fa-trash" aria-hidden="true"></i>
@@ -215,8 +219,8 @@
             <hr>
 
             <div class="row">
-                <div class="col-3"></div>
-                <button class=" col-6 btn btn-primary toolbar-control" id="send">Send</button>
+                <button class=" col-4 offset-2 btn btn-primary toolbar-control font-weight-bold" id="send">Save</button>
+								<a href="documents.html" class=" col-4 ml-2 btn btn-primary font-weight-bold">Back</a>
             </div>
         </div>
     </div>

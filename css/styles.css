@@ -110,6 +110,9 @@ text.lbl {
   stroke: black;
   font-style: italic; }
 
+.plot-control {
+  padding: 0.5em 0.1em !important; }
+
 .selectboxit-container {
   position: relative;
   width: 100% !important; }
@@ -146,5 +149,8 @@ text.lbl {
   .selectboxit-container .selectboxit-open * {
     color: black !important;
     background-color: white !important; }
+
+.selectboxit-option-icon-container {
+  display: none !important; }
 
 /*# sourceMappingURL=styles.css.map */

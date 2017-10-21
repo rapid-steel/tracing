@@ -79,7 +79,7 @@ class Viewer {
           container.className = 'page-container';
           container.id = `page${ num }`;
           container.innerHTML =
-            `<i class="fa fa-cog fa-spin fa-3x fa-fw loading"></i>`;
+            `<i class="fa fa-cog fa-spin fa-3x fa-fw loading" id="loading${num}"></i>`;
 
           this.doc.appendChild( container );
 
@@ -88,10 +88,16 @@ class Viewer {
               this.pageWidth = page.getViewport( 1 ).width;
               this.scale = document.getElementById('document-container').clientWidth /
                 this.pageWidth;
+              this.pageHeight = page.getViewport( this.scale ).height;
               this.renderPanel();
             }
-            this.renderPage( page, num );
-            this.$currentPage = $('#page' + this.currentPageNumber );
+            if( num > this.currentPageNumber - 2 && num < this.currentPageNumber + 2 )
+              this.renderPage( page, num );
+
+            container.style.height = this.pageHeight + 'px';
+
+            if ( num === this.currentPageNumber)
+              this.$currentPage = $('#page' + this.currentPageNumber );
           });
         }
       });
@@ -110,11 +116,10 @@ class Viewer {
       };
 
       if ( offset < this.doc.scrollTop ) {
-        this.currentPageNumber++;
-        this.renderPanel()
+          this.toNextPage();
+
       } else if ( this.$currentPage[0].offsetTop > this.doc.scrollTop ) {
-        this.currentPageNumber--;
-        this.renderPanel();
+          this.toPrevPage();
       }
     });
 
@@ -144,27 +149,68 @@ class Viewer {
       let id = $target.attr('id');
 
       if ( ! $target.hasClass('disabled') ) {
-        this.currentPageNumber += {
-          'next-page': 1,
-          'prev-page': -1
-        }[ id ];
-        this.$currentPage = $('#page' + this.currentPageNumber );
-        this.renderPanel();
+
+        switch ( id ) {
+
+          case 'next-page':
+            this.toNextPage();
+            break;
+          case 'prev-page':
+            this.toPrevPage();
+            break;
+        }
+
         this.doc.scrollTop = this.$currentPage[0].offsetTop;
       }
 
     });
+
 
     this.$controls.pageNumber.on('change', () => {
       let val = this.$controls.pageNumber.val();
 
       if( val > 0 && val <= this.pageCount ) {
-        this.currentPageNumber = val;
+        let start = +val > -2 ? +val : 1;
+        let end = +val < this.pageCount - 2 ? +val : this.pageCount;
+
+        for ( let i = start; i <= end; i++ )
+          this.docPDF.getPage( i ).then( page => this.renderPage( page, i ) );
+
+        this.currentPageNumber = +val;
+        this.$currentPage = $('#page' + this.currentPageNumber );
+
         this.renderPanel();
         this.doc.scrollTop = this.$currentPage[0].offsetTop;
       }
     });
 
+  }
+
+
+  toNextPage() {
+    let num = this.currentPageNumber + 2;
+
+    this.currentPageNumber++;
+    this.$currentPage = $('#page' + this.currentPageNumber );
+
+    if ( this.pageCount >= num )
+      this.docPDF.getPage( num ).then(
+        page => this.renderPage( page, num )
+      );
+    this.renderPanel();
+  }
+
+  toPrevPage() {
+    let num = this.currentPageNumber - 2;
+
+    this.currentPageNumber--;
+    this.$currentPage = $('#page' + this.currentPageNumber );
+
+    if ( num >= 1 )
+      this.docPDF.getPage( num ).then(
+        page => this.renderPage( page, num )
+      );
+    this.renderPanel();
   }
 
   renderPdf( scale, scroll ) {
@@ -175,15 +221,28 @@ class Viewer {
 
     for (let num = 1; num <= this.docPDF.numPages; num++) {
 
-      let $page = $(`#page${num}`).find('.page');
+      this.docPDF.getPage(num).then( page => {
+        let $page = $(`#page${num}`);
 
-      $page.remove();
-      $page.append(`  
+        if ( num === 1 ) {
+          this.pageHeight = page.getViewport( this.scale ).height;
+          if ( scroll ) {
+            this.currentPageNumber = Math.floor( scroll.y / this.pageHeight );
+          }
+        }
+
+
+
+        $page.css('height', this.pageHeight + 'px');
+        $page.html(`  
                 <i class="fa fa-cog fa-spin fa-3x fa-fw loading" id="loading${num}"></i>`);
 
-      this.docPDF.getPage(num).then( page => {
-        this.renderPage( page, num );
-        $(`#loading${num}`).remove();
+        if( num > this.currentPageNumber - 2 && num < this.currentPageNumber + 2 )
+          this.renderPage( page, num );
+
+        console.log($page.height());
+
+
         if ( num === this.currentPageNumber )
           this.$currentPage = $('#page' + this.currentPageNumber );
 
@@ -216,8 +275,9 @@ class Viewer {
     };
     page.render(renderContext);
 
+    $(`#loading${ num }`).remove();
     $( `#page${ num }`)[0].appendChild(canvas);
-    $(`#page${num}`).find('.loading').remove();
+
 
   }
 

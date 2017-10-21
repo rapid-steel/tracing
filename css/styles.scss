@@ -115,6 +115,10 @@ text.lbl {
   font-style: italic;
 }
 
+.plot-control {
+  padding: .5em .1em!important;
+}
+
 
 
 
@@ -163,4 +167,8 @@ text.lbl {
     color: black!important;
     background-color: white!important;
   }
+}
+
+.selectboxit-option-icon-container {
+  display: none!important;
 }

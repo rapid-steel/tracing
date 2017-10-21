@@ -280,6 +280,8 @@ class Axes {
 this.setScale( this.pointsVal.x, 'x');
     this.setScale( this.pointsVal.y, 'y');
 
+    return oldSizes;
+
   }
 
   drawAxes() {

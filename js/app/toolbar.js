@@ -41,7 +41,7 @@ class Toolbar {
         pointXedit: $('#pointXedit'),
         pointYedit: $('#pointYedit'),
 
-        plotName: $('#nameP'),
+        plotName: $('#plotNameP'),
         newPlotName: $('#newPlotName'),
 
         lineName: $('#nameL'),
@@ -129,6 +129,10 @@ class Toolbar {
     this.app.selectPlot();
   }
 
+  jumpToPlot() {
+    this.app.jumpToPlot();
+  }
+
   deletePlot() {
     this.app.deletePlot();
   }
@@ -136,6 +140,11 @@ class Toolbar {
   setName() {
     this.app.plots[ this.app.currentPlot ].lines[ this.app.currentLine ].name = this.$inputs.lineName.val();
     this.renderLinesSection();
+  };
+
+  setPlotName() {
+    this.app.plots[ this.app.currentPlot ].name = this.$inputs.plotName.val();
+    this.renderPlotSection();
   };
 
   addLine() {

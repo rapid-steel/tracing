@@ -75,7 +75,14 @@ let main = function() {
       });
 
       $(window).on('resize', () => {
-        this.plots[ this.currentPlot ].axes.correctSizes();
+        this.plots.forEach( plot => {
+          let oldSizes = plot.axes.correctSizes();
+          this.sizes = oldSizes;
+        });
+        this.sizes = {
+          width: this.$container.width(),
+          height: $('#document-container').height()
+        };
         this.render();
 
       });
@@ -118,13 +125,17 @@ let main = function() {
 
     selectPlot( ) {
       this.removePlot();
-      if ( this.plots[ this.currentPlot ].location )
-        this.viewer.scrollTo( this.plots[ this.currentPlot ].location );
+      this.jumpToPlot();
 
       this.plots[ this.currentPlot ].init();
       this.plots[ this.currentPlot ].axes.correctSizes();
       this.plots[ this.currentPlot ].lines.forEach( line => line.render() );
       this.render();
+    },
+
+    jumpToPlot() {
+      if ( this.plots[ this.currentPlot ].location )
+        this.viewer.scrollTo( this.plots[ this.currentPlot ].location );
     },
 
     deletePlot() {

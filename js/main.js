@@ -14,7 +14,6 @@ function init( data ) {
   docList.forEach( doc => {
 
     let string = renderRow( doc, docList );
-
     $elems.docList.append(string);
 
   });
@@ -38,6 +37,7 @@ function init( data ) {
     let index =  $(event.currentTarget).parent().index();
     $(`.doc:nth-child(${index + 1})`).remove();
     docList.splice(index, 1);
+    saveList( docList );
   });
 
   saveList( docList );
