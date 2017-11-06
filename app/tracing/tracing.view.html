@@ -1,0 +1,23 @@
+
+<div id="app-container" class="container-fluid" ng-controller="tracingController">
+
+	<div class="row" ng-if="!loadingDoc" style="width: 100%">
+
+		<div class="col-9" id="document-view"
+			 ng-controller="documentController"
+			 ng-include="'app/document/document.view.html'"
+			 ng-if="!notFound"></div>
+
+		<div class="col-3" id="toolbar"
+			 ng-controller="toolbarController"
+			 ng-include="'app/toolbar/toolbar.view.html'"
+			 ng-if="!notFound"></div>
+		</div>
+
+	<div class="col-12" ng-if="notFound">
+		<div class=" col-12 alert alert-danger">
+			Error! Such document is not found!
+		</div>
+	</div>
+
+</div>

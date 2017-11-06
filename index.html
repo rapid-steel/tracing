@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="tracingApp">
+<head>
+	<meta charset="UTF-8">
+	<title>Tracing</title>
+	<link rel="stylesheet" href="assets/css/bootstrap.css">
+	<link rel="stylesheet" href="assets/css/font-awesome.css">
+	<link type="text/css" rel="stylesheet" href="http://gregfranko.com/jquery.selectBoxIt.js/css/jquery.selectBoxIt.css" />
+	<link rel="stylesheet" href="assets/css/styles.css">
+
+	<script src="assets/lib/angular.min.js"></script>
+	<script src="assets/lib/angular-ui-router.min.js"></script>
+	<script src="assets/lib/angular-resource.js"></script>
+	<script src="assets/lib/http.js"></script>
+	<script src="assets/lib/jquery-3.1.1.min.js"></script>
+	<script src="assets/lib/bootstrap.js"></script>
+	<script src="assets/lib/d3.v4.js"></script>
+
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+	<script src="http://gregfranko.com/jquery.selectBoxIt.js/js/jquery.selectBoxIt.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/1.9.640/pdf.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/1.9.640/pdf.worker.js"></script>
+
+
+	<script src="assets/js/app/axes.js"></script>
+	<script src="assets/js/app/line.js"></script>
+	<script src="assets/js/app/plot.js"></script>
+
+	<script src="app/documents-list/documents-list.controller.js"></script>
+	<script src="app/tracing/tracing.controller.js"></script>
+	<script src="app/document/document.controller.js"></script>
+	<script src="app/toolbar/toolbar.controller.js"></script>
+	<script src="app/app.controller.js"></script>
+	<script src="app/app.service.js"></script>
+	<script src="app/app.module.js"></script>
+
+</head>
+<body>
+
+<div ng-controller="appController">
+
+	<div ui-view></div>
+
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

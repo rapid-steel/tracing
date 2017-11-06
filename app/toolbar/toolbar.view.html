@@ -1,0 +1,233 @@
+<div class="col text-center">
+	Add plot
+</div>
+
+<div class="row">
+	<div class="col-8 offset-1">
+		<input class="addPlot form-control" ng-model="models.newPlot">
+	</div>
+	<button class="btn btn-primary col-2 toolbar-control" title="Add plot"
+				ng-click="addPlot(  )">
+		<i class="fa fa-plus" aria-hidden="true"></i>
+	</button>
+</div>
+
+<div class="col text-center">
+	Current plot
+</div>
+
+<div class="row">
+
+	<div class="col-6 offset-1">
+		<input class="form-control toolbar-input" type="text"
+					 ng-model="plots[ currentPlot ].name"
+					 ng-model-options="{updateOn: 'change blur'}"
+					 ng-change="updateSelectPlot()">
+	</div>
+
+	<button class="col-2 btn btn-primary ml-2 toolbar-control plot-control" title="Scroll to plot position"
+					ng-click="jumpToPlot()">
+		<i class="fa fa-crosshairs" aria-hidden="true"></i>
+	</button>
+
+	<button class="col-2 btn btn-primary ml-2 toolbar-control plot-control" title="Delete plot"
+			ng-click="deletePlot()">
+		<i class="fa fa-trash" aria-hidden="true"></i>
+	</button>
+
+</div>
+
+<div class="row">
+	<div class="col-8 offset-1">
+		<select class="form-control" id="selectPlot"></select>
+	</div>
+</div>
+
+<hr>
+
+<div class="row">
+
+	<button class="btn col-4 offset-2 text-center appMode font-weight-bold"
+			ng-class="{ 'btn-primary-outline' : mode === 'read',  'btn-primary' : mode === 'plot'}"
+			ng-click="setMode('plot')">
+		<i class="fa fa-line-chart" aria-hidden="true"></i> Graph
+	</button>
+	<button class=" btn col-4 text-center appMode font-weight-bold"
+			ng-class="{ 'btn-primary-outline': mode === 'plot',  'btn-primary' : mode === 'read'}"
+			ng-click="setMode('read')">
+		<i class="fa fa-file-text-o" aria-hidden="true"></i> Read
+	</button>
+
+</div>
+
+<hr>
+
+<div class="col addPoint text-center" ng-if="!currentPoint">
+	Add point
+</div>
+<div class="col editPoint text-center" ng-if="currentPoint">
+	Edit point
+</div>
+
+<div class="row">
+	<input class="col-3 offset-2 addPoint form-control" type="number" step="0.001"
+				 ng-model="models.newPoint.x" ng-readonly="mode === 'read'">
+	<input class="col-3 addPoint form-control" type="number" step="0.001"
+				 ng-model="models.newPoint.y" ng-readonly="mode === 'read'">
+
+	<button class="col-2 offset-1 addPoint btn btn-primary toolbar-control" title="Add point"
+					ng-if="!currentPoint"
+					ng-click="addPoint( models.newPoint, true )"
+					ng-disabled="mode === 'read'">
+		<i class="fa fa-plus" aria-hidden="true"></i>
+	</button>
+
+
+	<div class="col-2 editPoint">
+		<button class="btn btn-primary toolbar-control" title="Save point"
+						ng-if="currentPoint"
+						ng-click="editPoint( models.newPoint, true )"
+						ng-disabled="mode === 'read'">
+			<i class="fa fa-floppy-o" aria-hidden="true"></i>
+		</button>
+	</div>
+	<div class="col-2 editPoint">
+		<button class="btn btn-primary toolbar-control" title="Delete point"
+						ng-if="currentPoint"
+						ng-click="deletePoint(currentLine, currentPoint, true)"
+						ng-disabled="mode === 'read'">
+			<i class="fa fa-trash" aria-hidden="true"></i>
+		</button>
+	</div>
+</div>
+
+<hr>
+
+<div class="col text-center">
+	Add line
+</div>
+
+<div class="row">
+	<div class="col-8 offset-1">
+		<input class="addLine form-control"
+					 ng-model="models.newLine"
+					 ng-readonly="mode === 'read'">
+	</div>
+	<button class="btn btn-primary col-2 toolbar-control"
+					ng-click="addLine()"
+					ng-disabled="mode === 'read'">
+		<i class="fa fa-plus" aria-hidden="true"></i>
+	</button>
+</div>
+
+<hr>
+
+<div class="col text-center">
+	Current line
+</div>
+
+<div class="row">
+	<div class="col-8 offset-1">
+		<input class="form-control toolbar-input" type="text"
+			ng-readonly="mode === 'read'"
+			ng-model="plots[ currentPlot ].lines[ currentLine ].name"
+			ng-model-options="{updateOn: 'change blur'}"
+			ng-change="updateSelectLine()">
+	</div>
+	<button class="btn btn-primary col-2 toolbar-control" title="Delete line"
+			ng-click="deleteLine()"
+			ng-disabled="mode === 'read'">
+		<i class="fa fa-trash" aria-hidden="true"></i>
+	</button>
+
+</div>
+
+<div class="row">
+	<div class="col-8 offset-1">
+		<select class="form-control" id="selectLine"
+						ng-disabled="mode === 'read'"></select>
+	</div>
+</div>
+
+<hr>
+
+<div class="col text-center">
+	Edit axes
+</div>
+
+<div class="row">
+	<div class="col-4 offset-3 text-center">X</div>
+	<div class="col-4 text-center">Y</div>
+</div>
+
+<div class="row">
+	<div class="col-3 text-right">
+		Origin
+	</div>
+	<input class=" col-4 form-control origin toolbar-input" type="number" id="originX" step="0.1"
+				 ng-readonly="mode === 'read'"
+				 ng-model="plots[ currentPlot ].axes.origin.x"
+				 ng-model-options="{updateOn: 'change blur'}"
+				 ng-change="setOrigins()">
+	<input class=" col-4 form-control origin toolbar-input" type="number" id="originY" step="0.1"
+				 ng-readonly="mode === 'read'"
+				 ng-model="plots[ currentPlot ].axes.origin.y"
+				 ng-model-options="{updateOn: 'change blur'}"
+				 ng-change="setOrigins()">
+</div>
+
+<div class="row">
+	<div class="col-3 text-right">
+		Label
+	</div>
+	<input class="col-4 form-control labelAxis toolbar-input" type="text" id="labelX"
+				 ng-readonly="mode === 'read'"
+				 ng-model="plots[ currentPlot ].axes.label.x"
+				 ng-model-options="{updateOn: 'change blur'}"
+				 ng-change="updateAxes( true )">
+	<input class="col-4 form-control labelAxis toolbar-input" type="text" id="labelY"
+				 ng-readonly="mode === 'read'"
+				 ng-model="plots[ currentPlot ].axes.label.y"
+				 ng-model-options="{updateOn: 'change blur'}"
+				 ng-change="updateAxes( true )">
+</div>
+
+<div class="row">
+	<div class="col-3 text-right">
+		Unit
+	</div>
+	<input class="col-4 form-control unit toolbar-input" type="text" id="unitX"
+				 ng-readonly="mode === 'read'"
+				 ng-model="plots[ currentPlot ].axes.unit.x"
+				 ng-model-options="{updateOn: 'change blur'}"
+				 ng-change="updateAxes( true )">
+	<input class="col-4 form-control unit toolbar-input" type="text" id="unitY"
+				 ng-readonly="mode === 'read'"
+				 ng-model="plots[ currentPlot ].axes.unit.y"
+				 ng-model-options="{updateOn: 'change blur'}"
+				 ng-change="updateAxes( true )">
+</div>
+
+<div class="row">
+	<div class="col-3 text-right">
+		Known point
+	</div>
+	<input class="col-4 form-control pointsVal toolbar-input" type="number" id="pointsValX" step="0.001"
+				 ng-readonly="mode === 'read'"
+				 ng-model="plots[ currentPlot ].axes.pointsVal.x"
+				 ng-model-options="{updateOn: 'change blur'}"
+				 ng-change="setPoint('x')">
+	<input class="col-4 form-control pointsVal toolbar-input" type="number" id="pointsValY" step="0.001"
+				 ng-readonly="mode === 'read'"
+				 ng-model="plots[ currentPlot ].axes.pointsVal.y"
+				 ng-model-options="{updateOn: 'change blur'}"
+				 ng-change="setPoint('y')">
+</div>
+
+<hr>
+
+<div class="row">
+	<button class=" col-4 offset-2 btn btn-primary toolbar-control font-weight-bold"
+	ng-click="save()">Save</button>
+	<a href="./index.html#!/" class=" col-4 ml-2 btn btn-primary font-weight-bold">Back</a>
+</div>

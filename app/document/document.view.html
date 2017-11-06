@@ -1,0 +1,51 @@
+<div id="view-toolbar">
+	<div id="zoom-plus" class="view-control zoom font-weight-bold"
+			 ng-click="setScale( 1 )"
+			 ng-class="{disabled: scale >= scales[ scales.length - 1] }">
+		<i class="fa fa-search-plus" aria-hidden="true"></i>
+	</div>
+	<div id="zoom-minus" class="view-control zoom font-weight-bold"
+			 ng-click="setScale( - 1 )"
+			 ng-class="{ disabled : scale <= scales[ 0 ] }">
+		<i class="fa fa-search-minus" aria-hidden="true"></i>
+	</div>
+
+	<input type="number" step="1" class="form-control view-control-input"
+				 ng-model="scale"
+				 ng-model-options="{updateOn: 'change blur'}"
+				 ng-change="newScale( scale )" > %
+
+
+	<div id="pages" class="view-control-mode" ng-if="viewerMode === 'pdf'">
+		<div id="prev-page" class="view-control page-control font-weight-bold"
+				 ng-class="{ disabled : currentPage === 1 }"
+				 ng-click="toPrevPage( false )">
+			<i class="fa fa-arrow-circle-o-up" aria-hidden="true"></i>
+		</div>
+		<div id="next-page" class="view-control page-control font-weight-bold"
+				 ng-class="{ disabled : currentPage === pageCount }"
+				 ng-click="toNextPage( false )">
+			<i class="fa fa-arrow-circle-o-down" aria-hidden="true"></i>
+		</div>
+
+		<input class="form-control view-control-input"
+					 ng-model="currentPage"
+					 ng-model-options="{updateOn: 'change blur'}"
+					 ng-change="scrollToPage( currentPage )" > / {{ pageCount }}
+
+	</div>
+
+	<div class="view-control ml-2 font-weight-bold" ng-click="savePlotLocation()">
+		<i class="fa fa-lock" aria-hidden="true"></i>
+	</div>
+
+</div>
+
+
+<div id="document-container">
+	<div id="document" style="overflow: scroll">
+		<img id="image" ng-show="viewerMode === 'image'"
+				 ng-src="{{imgUrl}}"
+				 ng-style="imgStyle">
+	</div>
+</div>

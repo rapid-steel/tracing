@@ -1,0 +1,46 @@
+<div class="container"
+		 ng-controller="documentsListController">
+
+	<div class="row">
+		<div class="col-3">Add new document (url):</div>
+
+		<input class="col-3"
+					 ng-model="newUrl"
+					 ng-change="checkExtension( newUrl )">
+
+		<button class="col-1 btn btn-primary" title="Add document"
+						ng-disabled="!newUrl"
+						ng-click="addDocument( newUrl )">
+			<i class="fa fa-plus" aria-hidden="true"></i>
+		</button>
+		<div class="alert alert-warning col-9" role="alert"
+				 ng-if="incorrectExtension">
+			This is not pdf or image file!
+		</div>
+	</div>
+
+	<hr>
+
+	<div class="row text-center" ng-if="loadingList">
+		<img class="loading-img" src="./assets/css/loading.gif">
+		<div>Loading documents list...</div>
+	</div>
+
+	<div class="row doc"
+			 ng-repeat="doc in documentsList track by $index">
+		<a class="col-8"
+			 ng-href="./index.html#!/document/{{ doc.id }}"
+			 ng-click="selectDocument($index)">
+			{{ doc.url }}
+		</a>
+		<div class="col-1" title="Created plots: {{ doc.plots.length }}">
+			<i class="fa fa-line-chart" aria-hidden="true"></i>
+			{{ doc.plots.length }}
+		</div>
+		<div class="col-1 btn btn-primary" title="Remove from list"
+				 ng-click="deleteDocument( doc.id )">
+			<i class="fa fa-trash" aria-hidden="true"></i>
+		</div>
+	</div>
+
+</div>
